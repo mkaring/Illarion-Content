@@ -14,7 +14,6 @@ details.
 You should have received a copy of the GNU Affero General Public License along
 with this program.  If not, see <http://www.gnu.org/licenses/>. 
 ]]
-require("base.common")
 require("content.chardescription")
 require("base.lookat")
 
@@ -23,22 +22,9 @@ module("item.id_2874_mirror", package.seeall)
 
 -- UPDATE common SET com_script='item.id_2874_mirror' WHERE com_itemid = 2874;
 
-ladderPosition = position(-32,193,-8)
-mirrorPosition = position(-28,193,-8)
-
 function LookAtItem(User, Item)
-    
-	local lookAt = base.lookat.GenerateLookAt(User, Item)
-
-    if Item.pos == mirrorPosition and User:getFaceTo() == Character.dir_east and User.pos == position(-29, 193, -8) then
-        lookAt.description = base.common.GetNLS("Hinter deinem Rücken erkennst du deutlich eine Leiter im Spiegel.",
-                                                "Behind your back you can clearly see a ladder in the mirror.")
-    
-        if ( not base.common.isItemIdInFieldStack(35, ladderPosition)) then
-            world:createItemFromId(35, 1, ladderPosition, true, 999, nil)
-        end
-    end
-	
+    local lookAt = base.lookat.GenerateLookAt(User, Item)
+    lookAt = quest.irundar.mirror.LookAt(User, Item, lookAt)
     world:itemInform(User, Item, lookAt)
 end
 
